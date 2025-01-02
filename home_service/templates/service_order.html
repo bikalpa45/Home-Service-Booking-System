@@ -1,0 +1,81 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block body %}
+<style>
+    th {
+        color: black;
+        font-weight: bold;
+    }
+</style>
+
+<div class="container-fluid" style="margin-top:10%">
+    <div class="container">
+        <div class="container-fluid">
+            <h2 style="font-weight:bold;font-family : 'Monotype Corsiva' ; color : #E6120E ;margin-top:5%" align="center">My Order</h2>
+            <hr>
+        </div>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th style="color:black">#</th>
+                    <th style="color:black">Full Name</th>
+                    <th style="color:black">Contact</th>
+                    <th style="color:black">Address</th>
+                    <th style="color:black">Date</th>
+                    
+                    <th style="color:black">Start time</th>
+                    <th style="color:black">End time</th>
+                    <th style="color:black">Status</th>
+                    <th style="color:black">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in order %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ i.customer.user.first_name }} {{ i.customer.user.last_name }}</td>
+                    <td>{{ i.customer.contact }}</td>
+                    <td>{{ i.customer.address }}</td>
+                    <td>{{ i.book_date }}</td>
+                    <td>{{ i.start_time }}</td>
+                    <td>{{ i.end_time }}</td>
+                    <td>{{ i.status.status }}</td>
+
+                    {% if i.status.id == 1 %} 
+<td>
+    <a href="{% url 'accept_confirmation' i.id %}">
+        <button class="btn btn-success" onclick="return confirm('Are you sure you want to accept this order?')">
+            <i class="fa fa-thumbs-up"></i> Accept
+        </button>
+    </a>
+    <a href="{% url 'cancel_order' i.id %}">
+        <button class="btn btn-danger" onclick="return confirm('Are you sure you want to cancel this order?')">
+            <i class="fa fa-times"></i> Cancel
+        </button>
+    </a>
+</td>
+{% elif i.status.id == 2 %} 
+<td>
+    <a href="{% url 'complete_order' i.id %}">
+        <button class="btn btn-primary" onclick="return confirm('Are you sure you want to mark this order as complete?')">
+            <i class="fa fa-check"></i> Mark as Complete
+        </button>
+    </a>
+    <a href="{% url 'cancel_order' i.id %}">
+        <button class="btn btn-danger" onclick="return confirm('Are you sure you want to cancel this order?')">
+            <i class="fa fa-times"></i> Cancel
+        </button>
+    </a>
+</td>
+{% elif i.status.id == 6 %} 
+<td style="font-weight:bold;color:green">Completed</td>
+{% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<br>
+<br>
+{% endblock %}

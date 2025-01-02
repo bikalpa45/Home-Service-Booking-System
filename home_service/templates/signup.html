@@ -1,0 +1,286 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block head %}
+    <style>
+    /* Internal CSS for this template */
+    .contact {
+        background-color: #f8f9fa;
+        padding: 2rem;
+    }
+
+    .contact h3 {
+        color: #007bff;
+    }
+
+    .contact-form .form-control {
+        border-radius: 5px;
+        border: 1px solid #ced4da;
+    }
+
+    .contact-form label {
+        font-weight: bold;
+    }
+
+    .contact-form button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .contact-form button:hover {
+        background-color: #0056b3;
+    }
+
+    #map {
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+    }
+</style>
+{% endblock %}
+{% block body %}
+    {% if errors %}
+        <div class="alert alert-danger">
+            <ul>
+                {% for error in errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    
+    {% if success %}
+        <div class="alert alert-success">
+            {{ success }}
+        </div>
+    {% endif %}
+
+    <section class="contact py-lg-5 py-md-4 py-md-3 py-2" id="contact" style="margin-top:7%">
+        <h3 class="mb-lg-4 mb-md-3 mb-sm-2 mb-2">Register Your Account</h3>
+        <section class="wthree-row py-5 w3-contact" id="contact">
+            <div class="container py-md-5">
+                <h5 class="w3ls-title text-center text-uppercase pb-md-5 pb-4">Register Your Account</h5>
+                <div class="row contact-form">
+                    <div class="col-lg-6 mt-lg-0 mt-5 map contact-right">
+                        <div class="address mt-3">
+                            <h5 class="pb-3 text-capitalize"></h5>
+                            <address>
+                                <img src="{% static 'images/sign.jpg' %}" style="width:100%" alt="Signup">
+                            </address>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 wthree-form-left">
+                        <div class="contact-top1">
+                            <form id="locationForm" action="#" method="post" class="f-color" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="contactusername">Username</label>
+                                        <input class="form-control" type="text" name="uname" placeholder="Username" required="">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="contactemail">Password</label>
+                                        <input class="form-control" type="password" name="pwd" placeholder="Password" required="">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="contactemail">Confirm Password</label>
+                                        <input class="form-control" type="password" name="cpwd" placeholder="Confirm Password" required="">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="contactusername">First name</label>
+                                        <input class="form-control" type="text" name="fname" placeholder="First Name" required="">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="contactemail">Last Name</label>
+                                        <input class="form-control" type="text" name="lname" placeholder="Last Name" required="">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="contactusername">Email</label>
+                                        <input class="form-control" type="email" name="email" placeholder="Email address" required="">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="contactusername">Image</label>
+                                        <input class="form-control" type="file" name="image" required="">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label for="contactusername">Contact</label>
+                                        <input class="form-control" type="text" name="contact" placeholder="Phone Number" required="">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label for="contactemail">Address</label>
+                                        <input class="form-control" type="text" name="address" placeholder="Address" required="">
+                                    </div>
+                                </div>
+
+                                <!-- Latitude and Longitude Fields -->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <input type="hidden" id="latitude" name="latitude" value="" readonly required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <input type="hidden" id="longitude" name="longitude" value="" readonly required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label for="contactemail">Select User Type</label>
+                                        <p style="margin-bottom:4%;padding:9px;border:1px solid lightgrey;border-radius:2px">
+                                            Service Man <input type="radio" name="type" value="service_man">  
+                                            <span style="margin-left:2%">Customer</span> <input type="radio" name="type" value="customer">
+                                        </p>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-info btn-block" onclick="getLocation()">Register</button>
+                            </form>
+                        </div>
+                        
+                    </div>
+
+                    <!-- Google Map -->
+                    <div id="map" style="height: 400px; width: 100%;"></div>
+                </div>
+            </div>
+        </section>
+    </section>
+    
+
+    <script>
+    
+            function validateForm() {
+                var uname = document.forms["locationForm"]["uname"].value;
+                var email = document.forms["locationForm"]["email"].value;
+                
+                // Check for form field validation
+                if (!validateFields()) {
+                    return false;
+                }
+        
+                // Check username and email duplication using AJAX
+                checkUsernameEmailDuplication(uname, email);
+        
+                // Don't submit form directly; form submission will occur in the AJAX success handler
+                return false;
+            }
+        
+            function validateFields() {
+                var pwd = document.forms["locationForm"]["pwd"].value;
+                var cpwd = document.forms["locationForm"]["cpwd"].value;
+                var fname = document.forms["locationForm"]["fname"].value;
+                var lname = document.forms["locationForm"]["lname"].value;
+                var contact = document.forms["locationForm"]["contact"].value;
+                var address = document.forms["locationForm"]["address"].value;
+                var latitude = document.forms["locationForm"]["latitude"].value;
+                var longitude = document.forms["locationForm"]["longitude"].value;
+                var type = document.forms["locationForm"]["type"].value;
+        
+                var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                var contactPattern = /^\d{10}$/;
+        
+                // Validate password length
+                if (pwd.length < 8) {
+                    alert("Password must be at least 8 characters long!");
+                    return false;
+                }
+        
+                // Check if passwords match
+                if (pwd !== cpwd) {
+                    alert("Passwords do not match!");
+                    return false;
+                }
+        
+                // Validate first and last name
+                if (fname.trim() === "" || lname.trim() === "") {
+                    alert("First and Last name are required!");
+                    return false;
+                }
+        
+                // Validate contact number
+                if (!contactPattern.test(contact)) {
+                    alert("Contact number must be exactly 10 digits!");
+                    return false;
+                }
+        
+                // Validate address
+                if (address.trim() === "") {
+                    alert("Address is required!");
+                    return false;
+                }
+        
+                // Validate latitude and longitude
+                if (latitude.trim() === "" || longitude.trim() === "") {
+                    alert("Location data is required! Please allow location access.");
+                    return false;
+                }
+        
+                // Validate user type selection
+                if (!type) {
+                    alert("Please select a user type!");
+                    return false;
+                }
+        
+                return true;
+            }
+        
+            // AJAX request to check for username and email duplication
+            function checkUsernameEmailDuplication(username, email) {
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', "{% url 'check_username_email' %}", true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.duplicate) {
+                            alert(response.message);  // Error message if there's a duplication
+                        } else {
+                            document.getElementById("locationForm").submit();  // No duplication, submit form
+                        }
+                    }
+                };
+                xhr.send('uname=' + encodeURIComponent(username) + '&email=' + encodeURIComponent(email));
+            }
+        
+    
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+    
+        function showPosition(position) {
+            document.getElementById("latitude").value = position.coords.latitude;
+            document.getElementById("longitude").value = position.coords.longitude;
+            
+            // Validate the form before submitting
+            if (validateForm()) {
+                document.getElementById("locationForm").submit();
+            }
+        }
+    </script>
+    
+    
+        
+        </body>
+        
+
+
+{% endblock %}

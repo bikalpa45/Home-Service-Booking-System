@@ -1,0 +1,18 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Distances</title>
+</head>
+<body>
+    <h1>Customer Distances to Service Providers</h1>
+    {% for customer_id, distances in results.items %}
+        <h2>Customer {{ customer_id }} distances to service providers:</h2>
+        <ul>
+            {% for service_id, distance in distances %}
+                <li>Service provider {{ service_id }}: {{ distance|floatformat:2 }} kilometers</li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+</body>
+</html>

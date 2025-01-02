@@ -1,0 +1,103 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block body %}
+<div class="container" style="margin-top:10%;">
+    <h2 style="font-weight:bold;font-family : 'Monotype Corsiva'; color : #E6120E; margin-top:2%" align="center">
+        Search Service provider
+        <span style="color:red"><span style="color:black;font-weight:bold"></span></span>
+    </h2>
+    <hr>
+
+    <div class="container-fluid" style="">
+        {% if not terror %}
+        <div class="row">
+            <div class="col-md-12">
+                <img src="{% static 'images/search1.jpg' %}" style="width:100%;height:auto">
+            </div>
+            <div class="col-md-12">
+                <form id="myform" method="post" action="" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <table class="table table-bordered table-striped table-hover" id="myTable" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th style="font-size:14px;">Select Category</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="font-size:14px;">
+                                    <select name="cat" class="form-control" id="categorySelect" required>
+                                        <option value="">Select Category</option>
+                                        {% for c1 in car1 %}
+                                        <option value="{{ c1.category }}">{{ c1.category }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <div class="error" id="categoryError"></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button type="submit" class="btn btn-primary btn-block">Search</button>
+                </form>
+            </div>
+        </div>
+        {% else %}
+<div class="row">
+    <div class="col-md-12">
+        <h3>Available Service Providers:</h3>
+        <ul>
+            {% for provider in order %}
+            <div class="row" style="margin-bottom:1%;border-radius:8px;padding:12px;width:90%;border:1px solid lightgrey">
+                <div class="col-md-4">
+                    <img src="{{provider.service_man.image.url}}" style="width:60%;border-radius:50%;height:180px">
+                </div>
+                <div class="col-md-4" align="left">
+                    <h4 style="font-weight:bold">{{provider.service_man.user.first_name}} {{provider.service_man.user.last_name}}</h4>
+                    <ul style="color:grey">
+                        <li>Mobile No. :- {{provider.service_man.contact}}</li>
+                        <li>Address :- {{provider.service_man.address}}</li>
+                        <li>Work :- {{provider.service_man.service_name}}</li>
+                        <li>Experience :- {{provider.service_man.city}}</li>
+                        {% comment %} <li>Hourly Rate :- {{provider.service_man.service_charge}} NPR</li> {% endcomment %}
+                        <li>Distance :- {{provider.distance|floatformat:2}} kilometers</li>
+                        {% if provider.service_man.id %}
+                        <a href="{% url 'booking' pid=provider.service_man.id %}"><button class="btn btn-success" style="margin-top:8%;width:60%">Book Now</button></a>
+                        {% else %}
+                        <a href="#">Invalid Service Man</a>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+
+        <br>
+        <br>
+        
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+<script>
+    document.getElementById('myForm').addEventListener('submit', function(event) {
+        var selectElement = document.getElementById('categorySelect');
+        var errorElement = document.getElementById('categoryError');
+        
+        if (selectElement.value === "") {
+            
+            errorElement.textContent = 'Please select a category.';
+            
+            event.preventDefault();
+        } else {
+            
+            errorElement.textContent = '';
+        }
+    });
+</script>
+{% endif %}
+    </div>
+</div>
+<br>
+        <br><br>
+        <br><br>
+        <br><br>
+        
+{% endblock %}

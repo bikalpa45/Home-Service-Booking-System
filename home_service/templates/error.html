@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Fast Service a Mistri Category Bootstrap Responsive Website Template | error :: w3layouts</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<meta name="keywords" content="Fast Service a Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" media="all">
+<link href="css/fontawesome-all.min.css" rel="stylesheet" type="text/css" media="all">
+<link href="css/easy-responsive-tabs.css" rel='stylesheet' type='text/css'/>
+<link rel="stylesheet" href="css/flexslider.css" type="text/css" media="all">
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>
+<link href="//fonts.googleapis.com/css?family=Roboto:400,500,700,900" rel="stylesheet">
+<link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet">
+</head>
+<body>
+					
+	<!-- Error -->
+	<section class="error" id="error">
+	<div class="header">
+	<h1 class="mb-lg-5 mb-md-4 mb-sm-3 mb-2">Error page</h1>
+</div>
+<div class="w3-main">
+	<div class="agile-info">
+		<h2>404</h2>
+		<h3>SORRY</h3>
+		<p>The Page You're Looking for Was Not Found.</p>
+		<div class="w3_gb">
+		{% comment %} <a href="user_home.html"><i class="fa fa-angle-double-left" aria-hidden="true"></i>go back</a> {% endcomment %}
+		</div>
+    <div class="container">
+      <h1>Error</h1>
+      <p>{{ message }}</p>
+  </div>
+	</div>
+</div>
+</section>
+	<!-- /Error -->
+
+   <!-- sign in and signup pop up toggle script -->
+    <script>
+        $('.toggle').click(function () {
+            // Switches the Icon
+            $(this).children('i').toggleClass('fa-pencil');
+            // Switches the forms  
+            $('.form').animate({
+                height: "toggle",
+                'padding-top': 'toggle',
+                'padding-bottom': 'toggle',
+                opacity: "toggle"
+            }, "slow");
+        });
+    </script>
+    <!-- sign in and signup pop up toggle script -->
+	
+<!-- start-smoth-scrolling -->
+<!-- here stars scrolling icon -->
+	<script type="text/javascript">
+		$(document).ready(function() {
+			/*
+				var defaults = {
+				containerID: 'toTop', // fading element id
+				containerHoverID: 'toTopHover', // fading element hover id
+				scrollSpeed: 1200,
+				easingType: 'linear' 
+				};
+			*/
+								
+			$().UItoTop({ easingType: 'easeOutQuart' });
+								
+			});
+	</script>
+	<!-- //here ends scrolling icon -->
+<!-- scrolling script -->
+<script type="text/javascript">
+	jQuery(document).ready(function($) {
+		$(".scroll").click(function(event){		
+			event.preventDefault();
+			$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
+		});
+	});
+</script> 
+<script type="text/javascript">
+	$(function () {
+  $('[data-toggle="popover"]').popover()
+})
+</script> 
+<!-- //scrolling script -->
+<!--//start-smoth-scrolling -->
+
+
+</body>
+</html>
